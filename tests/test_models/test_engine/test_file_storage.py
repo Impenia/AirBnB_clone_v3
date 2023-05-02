@@ -113,3 +113,15 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+def test_doc_get(self):
+        """... documentation for get function"""
+        expected = ' retrieves one object '
+        actual = FileStorage.get.__doc__
+        self.assertEqual(expected, actual)
+
+    def test_doc_count(self):
+        """... documentation for count function"""
+        expected = ' counts number of objects of a class in storage '
+        actual = FileStorage.count.__doc__
+        self.assertEqual(expected, actual)
