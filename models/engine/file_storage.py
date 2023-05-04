@@ -44,7 +44,7 @@ class FileStorage:
         """serializes __objects to the JSON file (path: __file_path)"""
         json_objects = {}
         for key in self.__objects:
-            json_objects[key] = self.__objects[key].to_dict()
+            json_objects[key] = self.__objects[key].to_dict(save_check=True)
         with open(self.__file_path, 'w') as f:
             json.dump(json_objects, f)
 
@@ -58,6 +58,21 @@ class FileStorage:
         except:
             pass
 
+    def get(self, cls, id):
+        """Retrieving object by class and/or id
+        """
+        key = cls.__name__ + '.' + id
+
+        if key in self.__objects:
+            return self.__objects[key]
+        else:
+            return None
+
+    def count(self, cls=None):
+        """Return count of objects in storage
+        """
+        return len(self.all(cls))
+
     def delete(self, obj=None):
         """delete obj from __objects if it’s inside"""
         if obj is not None:
@@ -68,33 +83,3 @@ class FileStorage:
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
-
-def get(self, cls, id):
-        """ retrieves one object """
-        obj_dict = {}
-        obj = None
-        if cls:
-            obj_dict = FileStorage.__objects.values()
-            for item in obj_dict:
-                if item.id == id:
-                    obj = item
-            return obj
-
-    def count(self, cls=None):
-        """ counts number of objects of a class in storage """
-        if cls:
-            obj_list = []
-            obj_dict = FileStorage.__objects.values()
-            for item in obj_dict:
-                if type(item).__name__ == cls:
-                    obj_list.append(item)
-            return len(obj_list)
-        else:
-            obj_list = []
-            for class_name in self.CNC:
-                if class_name == 'BaseModel':
-                    continue
-                obj_class = FileStorage.__objects
-                for item in obj_class:
-                    obj_list.append(item)
-            return len(obj_list)
